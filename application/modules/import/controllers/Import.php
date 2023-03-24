@@ -8,7 +8,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Import extends CI_Controller
 {
-
   public function __construct()
   {
     parent::__construct();
