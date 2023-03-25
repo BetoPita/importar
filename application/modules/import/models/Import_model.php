@@ -5,7 +5,7 @@ class Import_model extends CI_Model {
 
 	public function __construct() {
 		parent::__construct();
-		$this->table = 'productos';
+		$this->table = 'music';
 	}
 
 	public function add($data) {
@@ -22,7 +22,7 @@ class Import_model extends CI_Model {
 	}
 
 	public function get($where = 0) {
-		if($where) 
+		if($where)
 			$this->db->where($where);
 		$query = $this->db->get($this->table);
 		return $query->row();

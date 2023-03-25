@@ -17,7 +17,7 @@ class Import extends CI_Controller
     $this->ip_address    = $_SERVER['REMOTE_ADDR'];
     $this->datetime       = date("Y-m-d H:i:s");
 
-    
+
     if (!isset($_SESSION['id']) || $_SESSION['perfil_id'] != 1) {
       redirect(base_url('login'));
     }
@@ -28,7 +28,7 @@ class Import extends CI_Controller
     $data['nombre_usuario'] = "IAN";
     $data['AP_usuario'] = "MARTINEZ";
     $data['AM_usuario'] = "VAZQUEZ";
-    $this->blade->render("v_import",$data);
+    $this->blade->render("v_import", $data);
   }
 
   public function display()
@@ -60,51 +60,77 @@ class Import extends CI_Controller
       }
       $spreadsheet   = $reader->load($file_name);
       $sheet_data   = $spreadsheet->getActiveSheet()->toArray();
-      echo '<pre>';print_r($sheet_data);exit;
       $list       = [];
       foreach ($sheet_data as $key => $val) {
         if ($key != 0) {
-          $result   = $this->Import_model->get();
-          if ($result) {
-          } else {
-            $list[] = [
-              'codigo'          => $val[0],
-              'producto'      => $val[1],
-              'p_costo'        => str_replace('$', '', $val[2]),
-              'p_venta'          => str_replace('$', '', $val[3]),
-              'mayoreo'          => $val[4],
-              'existencia'       => $val[5],
-              'inv_minimo'          => $val[6],
-              'inv_maximo'          => $val[7],
-              'departamento'          => $val[8],
-              'created_at'       => $this->datetime,
-            ];
-          }
+          $list[] = [
+            'id' => $val[0],
+            'name' => $val[1],
+            'album' => $val[2],
+            'album_id' => $val[3],
+            'artists' => $val[4],
+            'artist_ids' => $val[5],
+            'track_number' => $val[6],
+            'disc_number' => $val[7],
+            'explicit' => $val[8],
+            'danceability' => $val[9],
+            'energy' => $val[10],
+            'key' => $val[11],
+            'loudness' => $val[12],
+            'mode' => $val[13],
+            'speechiness' => $val[14],
+            'acousticness' => $val[15],
+            'instrumentalness' => $val[16],
+            'liveness' => $val[17],
+            'valence' => $val[18],
+            'tempo' => $val[19],
+            'duration_ms' => $val[20],
+            'time_signature' => $val[21],
+            'year' => $val[22],
+            'release_date' => $val[23],
+          ];
         }
       }
       if (file_exists($file_name))
         unlink($file_name);
       if (count($list) > 0) {
+        //Borrar la inforación anterior
+        $this->db->where('1=1')->delete('music');
         foreach ($list as $l => $producto) {
 
-          $this->db->insert('productos', [
-            'codigo_id'          => $this->Import_model->addOrUpdateCodigo($producto['codigo']),
-            'producto'      => $producto['producto'],
-            'p_costo'        => $producto['p_costo'],
-            'p_venta'          => $producto['p_venta'],
-            'mayoreo'          => $producto['mayoreo'],
-            'existencia'       => $producto['existencia'],
-            'inv_minimo'          => $producto['inv_minimo'],
-            'inv_maximo'          => $producto['inv_maximo'],
-            'categoria_id'          => $this->Import_model->addOrUpdateCategoria($producto['departamento']),
-            'created_at'       => $producto['created_at'],
+          $this->db->insert('music', [
+
+            'id' => $producto['id'],
+            'name' => $producto['name'],
+            'album' => $producto['album'],
+            'album_id' => $producto['album_id'],
+            'artists' => $producto['artists'],
+            'artist_ids' => $producto['artist_ids'],
+            'track_number' => $producto['track_number'],
+            'disc_number' => $producto['disc_number'],
+            'explicit' => $producto['explicit'],
+            'danceability' => $producto['danceability'],
+            'energy' => $producto['energy'],
+            'key' => $producto['key'],
+            'loudness' => $producto['loudness'],
+            'mode' => $producto['mode'],
+            'speechiness' => $producto['speechiness'],
+            'acousticness' => $producto['acousticness'],
+            'instrumentalness' => $producto['instrumentalness'],
+            'liveness' => $producto['liveness'],
+            'valence' => $producto['valence'],
+            'tempo' => $producto['tempo'],
+            'duration_ms' => $producto['duration_ms'],
+            'time_signature' => $producto['time_signature'],
+            'year' => $producto['year'],
+            'release_date' => $producto['release_date'],
           ]);
         }
         $result = true;
         if ($result) {
           $json = [
             'exito' => true,
-            'message'   => "Todos los productos se importaron con éxito",
+            'message'   => "Todos los datos se importaron con éxito",
           ];
         } else {
           $json = [
