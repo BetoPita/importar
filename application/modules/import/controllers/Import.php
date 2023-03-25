@@ -37,7 +37,9 @@ class Import extends CI_Controller
     $data["result"] = $this->Import_model->get_all();
     $this->blade->render("v_import");
   }
-
+  public function phpinfo(){
+    echo phpinfo();
+  }
   public function import_data()
   {
     $path     = 'documents/dataset/';
@@ -45,10 +47,14 @@ class Import extends CI_Controller
 
     $this->upload_config($path);
     if (!$this->upload->do_upload('file')) {
+      echo $this->upload->display_errors();
+      exit;
       $json = [
         'error_message' => $this->upload->display_errors(),
       ];
     } else {
+      echo 'entre 2';
+      exit;
       $file_data   = $this->upload->data();
       $file_name   = $path . $file_data['file_name'];
       $arr_file   = explode('.', $file_name);
@@ -156,7 +162,7 @@ class Import extends CI_Controller
     $config['allowed_types']   = 'csv|CSV|xlsx|XLSX|xls|XLS';
     $config['max_filename']     = '255';
     $config['encrypt_name']   = TRUE;
-    $config['max_size']     = -1;
+    $config['max_size']     = 0;
     $this->load->library('upload', $config);
   }
   public function informacion(){
