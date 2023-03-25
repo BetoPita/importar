@@ -25,7 +25,10 @@ class Import extends CI_Controller
 
   public function index()
   {
-    $this->blade->render("v_import");
+    $data['nombre_usuario'] = "IAN";
+    $data['AP_usuario'] = "MARTINEZ";
+    $data['AM_usuario'] = "VAZQUEZ";
+    $this->blade->render("v_import",$data);
   }
 
   public function display()
@@ -37,7 +40,7 @@ class Import extends CI_Controller
 
   public function import_data()
   {
-    $path     = 'documents/products/';
+    $path     = 'documents/dataset/';
     $json     = [];
 
     $this->upload_config($path);
@@ -57,8 +60,8 @@ class Import extends CI_Controller
       }
       $spreadsheet   = $reader->load($file_name);
       $sheet_data   = $spreadsheet->getActiveSheet()->toArray();
+      echo '<pre>';print_r($sheet_data);exit;
       $list       = [];
-      $this->db->where('id >',0)->delete('productos');
       foreach ($sheet_data as $key => $val) {
         if ($key != 0) {
           $result   = $this->Import_model->get();
