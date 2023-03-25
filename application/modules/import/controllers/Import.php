@@ -156,7 +156,11 @@ class Import extends CI_Controller
     $config['allowed_types']   = 'csv|CSV|xlsx|XLSX|xls|XLS';
     $config['max_filename']     = '255';
     $config['encrypt_name']   = TRUE;
-    $config['max_size']     = 4096;
+    $config['max_size']     = -1;
     $this->load->library('upload', $config);
+  }
+  public function informacion(){
+    $data['informacion'] = $this->Import_model->get_all();
+    $this->blade->render("informacion",$data);
   }
 }

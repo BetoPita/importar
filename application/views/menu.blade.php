@@ -22,6 +22,10 @@
                         <a href="{{ base_url('import') }}" aria-expanded="false"><i class="fa fa-file"></i><span
                                 class="hide-menu">Importar</span></a>
                     </li>
+                    <li>
+                        <a href="{{ base_url('import/informacion') }}" aria-expanded="false"><i
+                                class="fa fa-file"></i><span class="hide-menu">Información importada</span></a>
+                    </li>
                 @endif
             </ul>
         </nav>

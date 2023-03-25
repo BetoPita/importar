@@ -32,6 +32,7 @@
 @section('included_js')
 <script>
     $(document).ready(function() {
+        const base_url = "{{base_url()}}";
         $("body").on("submit", "#form-upload-user", function(e) {
             e.preventDefault();
             var data = new FormData(this);
@@ -46,12 +47,13 @@
                 beforeSend: function() {
                     $("#btnUpload").prop('disabled', true);
                     $(".user-loader").show();
-                }, 
+                },
                 success: function(result) {
                     $("#btnUpload").prop('disabled', false);
                     if(result.exito){
                         ExitoCustom(result.message,() => {
-                            location.reload();
+                            let url = '/import/informacion';
+                            window.location.href = base_url+url
                         });
                     }else{
                         ErrorCustom(result.message);
